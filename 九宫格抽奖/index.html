@@ -1,0 +1,191 @@
+yer<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+        <title>信息系统部大H专家抽奖</title>
+        <link rel="stylesheet" type="text/css" href="http://www.sucaihuo.com/jquery/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="layer.css" />
+        <style type="text/css">
+            #lottery{width:574px;height:584px;margin:20px auto;background:url(images/bg.jpg) no-repeat;padding:50px 55px;}
+            #lottery table td{width:142px;height:142px;text-align:center;vertical-align:middle;font-size:24px;color:#333;font-index:-999}
+            #lottery table td a{width:284px;height:284px;line-height:150px;display:block;text-decoration:none;}
+            #lottery table td.active{background-color:#ea0000;}
+			#lottery table td.sel{position: relative;}
+            #lottery table td.sel span{position: absolute;top: 0;bottom: 0;left: 0;right: 0;background: rgba(0,0,0,.7);color: #fff;font-size: 15px;line-height: 142px;}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="demo">
+                <div id="lottery">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td class="lottery-unit lottery-unit-7"><img src="images/1.png"></td>
+                            <td class="lottery-unit lottery-unit-0"><img src="images/2.png"></td>
+                            <td class="lottery-unit lottery-unit-1"><img src="images/4.png"></td>
+                            <td class="lottery-unit lottery-unit-11"><img src="images/9.png"></td>
+                        </tr>
+                        <tr>
+                            <td class="lottery-unit lottery-unit-6"><img src="images/7.png"></td>
+                            <td colspan="2" rowspan="2"><a href="javascript:void(0);"></a></td>
+                            <td class="lottery-unit lottery-unit-2"><img src="images/5.png"></td>
+                        </tr>
+                        <tr>
+                            <td class="lottery-unit lottery-unit-10"><img src="images/9.png"></td>
+                            <td class="lottery-unit lottery-unit-4"><img src="images/6.png"></td>
+                        </tr>
+                        <tr>
+                            <td class="lottery-unit lottery-unit-3"><img src="images/5.png"></td>
+                            <td class="lottery-unit lottery-unit-8"><img src="images/8.png"></td>
+                            <td class="lottery-unit lottery-unit-5"><img src="images/6.png"></td>
+                            <td class="lottery-unit lottery-unit-9"><img src="images/3.png"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://www.sucaihuo.com/Public/js/other/jquery.js"></script> 
+		<script type="text/javascript" src="layer.js"></script> 
+        <script type="text/javascript">
+            var lottery = {
+                index: 0, //当前转动到哪个位置，起点位置
+                count: 0, //总共有多少个位置
+                timer: 0, //setTimeout的ID，用clearTimeout清除
+                speed: 20, //初始转动速度
+                times: 0, //转动次数
+                cycle: 50, //转动基本次数：即至少需要转动多少次再进入抽奖环节
+                prize: 0, //中奖位置
+                init: function(id) {
+                    if ($("#" + id).find(".lottery-unit").length > 0) {
+                        $lottery = $("#" + id);
+                        $units = $lottery.find(".lottery-unit");
+                        this.obj = $lottery;
+                        this.count = $units.length;
+                        $lottery.find(".lottery-unit-" + this.index).addClass("active");
+                    }
+                },
+                roll: function() {
+                    var index = this.index;
+                    var count = this.count;
+                    var lottery = this.obj;
+                    $(lottery).find(".lottery-unit-" + index).removeClass("active");
+                    index += 1;
+                    if (index > count - 1) {
+                        index = 0;
+                    }
+                    $(lottery).find(".lottery-unit-" + index).addClass("active");
+                    this.index = index;
+                    return false;
+                },
+                stop: function(index) {
+                    this.prize = index;
+                    return false;
+                }
+            };
+
+			var gifts =new Array(0,0,0,0,0,0,0,0,0,0);
+			var results = new Array(10);
+			
+			var rIndex = 0;
+
+
+            function roll() {
+                lottery.times += 1;
+                lottery.roll();
+                var prize_site = $("#lottery").attr("prize_site");
+                if (lottery.times > lottery.cycle + 10 && lottery.index == prize_site) {
+                    var prize_id = $("#lottery").attr("prize_id");
+                    var prize_name = $("#lottery").attr("prize_name");
+                    //alert("前端中奖位置："+prize_site+"\n"+"中奖名称："+prize_name+"\n中奖id："+prize_id);
+
+					results[rIndex] = prize_name;
+                    
+					rIndex++;
+
+					
+					if(rIndex < 10){
+						//墨绿深蓝风
+						layer.alert("<p style='font-size:22;color:#ff0000;font-weight:bolder;'>恭喜您获得了【"+prize_name+'】</p>');
+					}else{
+
+						layer.alert("<p style='font-size:22;color:#ff0000;font-weight:bolder;'>恭喜您获得了【"+prize_name+'】</p>', {
+						  skin: 'layui-layer-molv' //样式类名
+						  ,closeBtn: 0
+						}, function(){
+						  layer.alert("<p style='font-size:22;color:#ff0000;font-weight:bolder;'>抽奖整体结果如下:</p><p style='font-size:22;color:#0000ff;font-weight:bolder;'>"+results[0]+"</br>"+results[1]+"</br>"+results[2]+"</br>"+results[3]+"</br>"+results[4]+"</br>"+results[5]+"</br>"+results[6]+"</br>"+results[7]+"</br>"+results[8]+"</br>"+results[9]+"</p>", {
+							skin: 'layui-layer-molv'
+							,closeBtn: 0
+							,anim: 4 //动画类型
+						  });
+						});
+					}
+
+					gifts[prize_site] = 1;
+                    clearTimeout(lottery.timer);
+
+					var unit = $(lottery.obj).find(".lottery-unit-"+prize_site);
+					unit.addClass("sel");
+                    unit.append($('<span>已经被抽中啦！</span>'));
+
+					//alert("index = "+rIndex);
+
+                    lottery.prize = -1;
+                    lottery.times = 0;
+                    click = false;
+					
+					/*
+					if(rIndex == 10){
+						layer.alert("<p style='font-size:36;color:#ff0000;font-weight:bolder;'>恭喜您获得了【"+results[9]+"】</p></br></br><p style='font-size:36;color:#ff0000;font-weight:bolder;'>抽奖整体结果如下:</p><p style='font-size:36;color:#0000ff;font-weight:bolder;'>"+results[0]+"</br>"+results[1]+"</br>"+results[2]+"</br>"+results[3]+"</br>"+results[4]+"</br>"+results[5]+"</br>"+results[6]+"</br>"+results[7]+"</br>"+results[8]+"</br>"+results[9]+"</p>");
+					}
+					*/
+                } else {
+                    if (lottery.times < lottery.cycle) {
+                        lottery.speed -= 10;
+                    } else if (lottery.times == lottery.cycle) {
+                        var index = Math.random() * (lottery.count) | 0;
+                        lottery.prize = index;
+                    } else {
+                        if (lottery.times > lottery.cycle + 10 && ((lottery.prize == 0 && lottery.index == 7) || lottery.prize == lottery.index + 1)) {
+                            lottery.speed += 110;
+                        } else {
+                            lottery.speed += 20;
+                        }
+                    }
+                    if (lottery.speed < 40) {
+                        lottery.speed = 40;
+                    }
+                    lottery.timer = setTimeout(roll, lottery.speed);
+                }
+                return false;
+            }
+            
+			//var target = new Array(3,1,2,5,9,6,0,4,8,7);
+			//var tIndex = 0;
+
+            var click = false;
+            $(function() {
+                lottery.init('lottery');
+                $("#lottery a").click(function() {
+                     if (click) {
+                        return false;
+                    } else {
+						if(rIndex >= 10){
+							layer("抱歉，奖品被抽完了，请积极参与大H活动");
+							return false;
+						}
+                        lottery.speed = 100;
+                        $.post("ajax.php", {'gifts': gifts}, function(data) { //获取奖品，也可以在这里判断是否登陆状态
+							//alert(data);
+							$("#lottery").attr("prize_site",data.prize_site);
+                            $("#lottery").attr("prize_id", data.prize_id);
+                            $("#lottery").attr("prize_name", data.prize_name);
+                            roll();
+                            click = true;
+                            return false;
+                        }, "json")
+                    }
+                });
+            })
+        </script>
+    </body>
+</html>

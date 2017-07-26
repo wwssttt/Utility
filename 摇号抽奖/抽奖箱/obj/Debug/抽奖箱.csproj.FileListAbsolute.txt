@@ -1,0 +1,9 @@
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\bin\Debug\抽奖箱.exe.config
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\bin\Debug\抽奖箱.exe
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\bin\Debug\抽奖箱.pdb
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\obj\Debug\抽奖箱.Properties.Resources.resources
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\obj\Debug\抽奖箱.csproj.GenerateResource.Cache
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\obj\Debug\抽奖箱.exe
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\obj\Debug\抽奖箱.pdb
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\obj\Debug\抽奖箱.csprojResolveAssemblyReference.cache
+d:\visual studio 2017\Projects\抽奖箱\抽奖箱\obj\Debug\抽奖箱.mainForm.resources

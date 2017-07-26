@@ -1,0 +1,104 @@
+<?php
+//prize表示奖项内容，v表示中奖几率(若数组中七个奖项的v的总和为100，如果v的值为1，则代表中奖几率为1%，依此类推)
+$prize_arr = array(
+    '0' => array('id' => 1, 'prize' => '张总幸福大餐', 'v' => 23),
+    '1' => array('id' => 2, 'prize' => '移动硬盘', 'v' => 17),
+    '2' => array('id' => 3, 'prize' => '黄山毛峰高级茶叶', 'v' => 13),
+    '3' => array('id' => 4, 'prize' => '黄山毛峰高级茶叶', 'v' => 13),
+    '4' => array('id' => 5, 'prize' => '普洱高级茶叶', 'v' => 9),
+    '5' => array('id' => 6, 'prize' => '普洱高级茶叶', 'v' => 9),
+    '6' => array('id' => 7, 'prize' => '鲜花', 'v' => 7),
+    '7' => array('id' => 8, 'prize' => '漫步者耳麦', 'v' => 5),
+    '8' => array('id' => 9, 'prize' => '张裕香槟', 'v' => 3),
+    '9' => array('id' => 10, 'prize' => '无线鼠标', 'v' => 1),
+    '10' => array('id' => 11, 'prize' => '谢谢参与', 'v' => 0),
+    '11' => array('id' => 12, 'prize' => '谢谢参与', 'v' => 0),
+);
+
+$gifts = $_POST["gifts"];
+$total = 0;
+$left = 0;
+$avg = 0;
+
+for($i = 0; $i < count($gifts); $i++){
+	if($gifts[$i] == 0){
+		$left++;
+	}else{
+		$total += $prize_arr[$i]['v'];
+	}
+}
+
+if($left == 0){
+	$avg = $total;
+}else{
+	$avg = floor($total / $left);
+}
+
+$first = 100;
+$total = 0;
+
+foreach ($prize_arr as $k=>$v) {
+	if($k == "10" || $k == "11"){
+		continue;
+	}
+
+	if($gifts[$k] == 0){
+
+		if($first == 100){
+			$first = $v['id'];
+		}
+		
+		$arr[$v['id']] = $v['v'] + $avg;
+		$total += $arr[$v['id']];
+
+	}else{
+		$arr[$v['id']] = 0;
+	}
+}
+
+
+if($first != 100){
+	$arr[$first] += (100 - $total);
+}
+
+
+/*
+$res = "";
+foreach($arr as $k=>$v){
+	$res = $res.$k."=".$v.";";
+}
+
+echo $res;
+*/
+
+$prize_id = getRand($arr); //根据概率获取奖项id 
+foreach($prize_arr as $k=>$v){ //获取前端奖项位置
+    if($v['id'] == $prize_id){
+     $prize_site = $k;
+     break;
+    }
+}
+$res = $prize_arr[$prize_id - 1]; //中奖项 
+
+$data['prize_name'] = $res['prize'];
+$data['prize_site'] = $prize_site;//前端奖项从-1开始
+$data['prize_id'] = $prize_id;
+echo json_encode($data);
+
+function getRand($proArr) {
+    $data = '';
+    $proSum = array_sum($proArr); //概率数组的总概率精度 
+
+    foreach ($proArr as $k => $v) { //概率数组循环
+        $randNum = mt_rand(1, $proSum);
+        if ($randNum <= $v) {
+            $data = $k;
+            break;
+        } else {
+            $proSum -= $v;
+        }
+    }
+    unset($proArr);
+
+    return $data;
+}
